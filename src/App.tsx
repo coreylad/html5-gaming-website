@@ -1,11 +1,12 @@
 import { useState, useMemo } from 'react'
 import { useKV } from '@github/spark/hooks'
-import { GameController, Heart, Funnel } from '@phosphor-icons/react'
+import { GameController, Heart, Funnel, GearSix } from '@phosphor-icons/react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { GameCard } from '@/components/GameCard'
 import { GameModal } from '@/components/GameModal'
+import { AdminPanel } from '@/components/AdminPanel'
 import { GAMES } from '@/lib/gameData'
 import { Game, GameCategory } from '@/lib/types'
 import { toast } from 'sonner'
@@ -17,6 +18,7 @@ function App() {
   const [playCounts, setPlayCounts] = useKV<Record<string, number>>('game-play-counts', {})
   const [selectedGame, setSelectedGame] = useState<Game | null>(null)
   const [isGameModalOpen, setIsGameModalOpen] = useState(false)
+  const [isAdminPanelOpen, setIsAdminPanelOpen] = useState(false)
   const [activeCategory, setActiveCategory] = useState<GameCategory | 'All'>('All')
   const [activeTab, setActiveTab] = useState<'all' | 'favorites'>('all')
 
@@ -75,11 +77,21 @@ function App() {
   return (
     <div className="min-h-screen bg-background pattern-bg">
       <div className="container mx-auto px-6 py-8 md:px-12 md:py-12 space-y-8">
-        <header className="text-center space-y-4">
+        <header className="text-center space-y-4 relative">
+          <Button
+            variant="outline"
+            size="icon"
+            className="absolute right-0 top-0"
+            onClick={() => setIsAdminPanelOpen(true)}
+            title="Admin Panel"
+          >
+            <GearSix className="w-5 h-5" />
+          </Button>
+          
           <div className="flex items-center justify-center gap-3">
             <GameController weight="fill" className="w-12 h-12 text-primary" />
             <h1 className="text-4xl md:text-5xl font-black text-foreground tracking-tight uppercase">
-              GameVault
+              WEBGAMES.LOL
             </h1>
           </div>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
@@ -181,6 +193,11 @@ function App() {
         game={selectedGame}
         isOpen={isGameModalOpen}
         onClose={handleCloseModal}
+      />
+
+      <AdminPanel
+        isOpen={isAdminPanelOpen}
+        onClose={() => setIsAdminPanelOpen(false)}
       />
     </div>
   )
