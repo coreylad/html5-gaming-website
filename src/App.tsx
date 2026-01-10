@@ -79,7 +79,7 @@ function App() {
           <div className="flex items-center justify-center gap-3">
             <GameController weight="fill" className="w-12 h-12 text-primary" />
             <h1 className="text-4xl md:text-5xl font-black text-foreground tracking-tight uppercase">
-              GameVault
+              WEBGAMES.LOL
             </h1>
           </div>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
