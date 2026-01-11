@@ -1,18 +1,61 @@
-# ✨ Welcome to Your Spark Template!
-You've just launched your brand-new Spark Template Codespace — everything’s fired up and ready for you to explore, build, and create with Spark!
+# HTML5 Gaming Website
 
-This template is your blank canvas. It comes with a minimal setup to help you get started quickly with Spark development.
+A modern HTML5 gaming platform that showcases browser-based games with an immersive, arcade-inspired interface where users can discover, play, and track their gaming experiences.
 
-🚀 What's Inside?
-- A clean, minimal Spark environment
-- Pre-configured for local development
-- Ready to scale with your ideas
-  
-🧠 What Can You Do?
+## Features
 
-Right now, this is just a starting point — the perfect place to begin building and testing your Spark applications.
+- 🎮 **Game Gallery** - Browse and play HTML5 games directly in your browser
+- ❤️ **Favorites System** - Mark your favorite games for quick access
+- 🎯 **Category Filtering** - Filter games by Action, Puzzle, Arcade, Strategy, and Sports
+- 📊 **Play Statistics** - Track play counts for each game
+- 🎨 **Modern UI** - Beautiful, responsive design with dark mode support
+- 💰 **Donations Panel** - Built-in admin panel for managing donations
 
-## 🐳 Docker Setup
+## Tech Stack
+
+- **React 19** - Latest React with modern hooks
+- **TypeScript** - Type-safe development
+- **Vite** - Fast build tool and dev server
+- **Tailwind CSS** - Utility-first styling
+- **Radix UI** - Accessible component primitives
+- **Local Storage** - Client-side data persistence
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js 20 or higher
+- npm or yarn
+
+### Installation
+
+1. Clone the repository:
+```bash
+git clone https://github.com/coreylad/html5-gaming-website.git
+cd html5-gaming-website
+```
+
+2. Install dependencies:
+```bash
+npm install
+```
+
+3. Start the development server:
+```bash
+npm run dev
+```
+
+4. Open your browser and navigate to `http://localhost:5173`
+
+### Building for Production
+
+```bash
+npm run build
+```
+
+The production-ready files will be in the `dist` directory.
+
+## Docker Setup
 
 This project includes Docker support for easy deployment and containerization.
 
@@ -54,12 +97,73 @@ docker rm gaming-website
 - **Port**: The application runs on port 80 inside the container, mapped to port 8080 on the host
 - **Web Server**: Nginx for serving static files
 
-🧹 Just Exploring?
-No problem! If you were just checking things out and don’t need to keep this code:
+## Admin Panel
 
-- Simply delete your Spark.
-- Everything will be cleaned up — no traces left behind.
+The application includes an admin panel for managing donations and other settings.
 
-📄 License For Spark Template Resources 
+- Click the gear icon in the top-right corner to access the admin panel
+- Default password: `admin123` (change this in production!)
+- Configure PayPal and Stripe payment options
+- Manage donation tiers and buttons
 
-The Spark Template files and resources from GitHub are licensed under the terms of the MIT license, Copyright GitHub, Inc.
+## Data Persistence
+
+User data (favorites, play counts, admin settings) is stored in the browser's localStorage. This means:
+- Data persists across browser sessions
+- Data is specific to each browser/device
+- Clearing browser data will reset the application
+
+For production use with multiple users, consider implementing a backend API with a database.
+
+## Project Structure
+
+```
+html5-gaming-website/
+├── src/
+│   ├── components/        # React components
+│   │   ├── ui/           # Reusable UI components
+│   │   ├── AdminPanel.tsx
+│   │   ├── DonationsPanel.tsx
+│   │   ├── GameCard.tsx
+│   │   └── GameModal.tsx
+│   ├── hooks/            # Custom React hooks
+│   │   └── useLocalStorage.ts
+│   ├── lib/              # Utilities and data
+│   │   ├── gameData.ts   # Game definitions
+│   │   ├── types.ts      # TypeScript types
+│   │   └── utils.ts      # Helper functions
+│   ├── styles/           # Global styles
+│   ├── App.tsx           # Main app component
+│   └── main.tsx          # App entry point
+├── public/               # Static assets
+├── Dockerfile            # Docker configuration
+├── docker-compose.yml    # Docker Compose configuration
+├── nginx.conf           # Nginx configuration
+└── package.json         # Project dependencies
+```
+
+## Adding New Games
+
+To add new games to the platform:
+
+1. Open `src/lib/gameData.ts`
+2. Add a new game object to the `GAMES` array with the following structure:
+
+```typescript
+{
+  id: 'unique-game-id',
+  title: 'Game Title',
+  description: 'Brief description of the game',
+  category: 'Action', // or 'Puzzle', 'Arcade', 'Strategy', 'Sports'
+  imageUrl: '/path/to/game/thumbnail.jpg',
+  gameUrl: '/path/to/game/index.html' // or external URL
+}
+```
+
+## License
+
+MIT License - see the LICENSE file for details.
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
