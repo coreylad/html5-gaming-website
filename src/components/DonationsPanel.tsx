@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import { useKV } from '@github/spark/hooks'
-import { CurrencyDollar, Copy, Plus, Trash, Pencil, Check } from '@phosphor-icons/react'
+import { useLocalStorage } from '@/hooks/useLocalStorage'
+import { CurrencyDollar, Copy, Plus, Trash, Check } from '@phosphor-icons/react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -23,9 +23,8 @@ interface DonationOption {
 }
 
 export function DonationsPanel() {
-  const [donationOptions, setDonationOptions] = useKV<DonationOption[]>('donation-options', [])
+  const [donationOptions, setDonationOptions] = useLocalStorage<DonationOption[]>('donation-options', [])
   const [isAddingNew, setIsAddingNew] = useState(false)
-  const [editingId, setEditingId] = useState<string | null>(null)
   const [newOption, setNewOption] = useState<Partial<DonationOption>>({
     type: 'paypal',
     currency: 'USD',
@@ -33,8 +32,8 @@ export function DonationsPanel() {
   })
 
   // PayPal and Stripe configuration
-  const [paypalEmail, setPaypalEmail] = useKV<string>('paypal-email', '')
-  const [stripePublicKey, setStripePublicKey] = useKV<string>('stripe-public-key', '')
+  const [paypalEmail, setPaypalEmail] = useLocalStorage<string>('paypal-email', '')
+  const [stripePublicKey, setStripePublicKey] = useLocalStorage<string>('stripe-public-key', '')
 
   const handleAddOption = () => {
     if (!newOption.name) {
@@ -53,19 +52,19 @@ export function DonationsPanel() {
       description: newOption.description
     }
 
-    setDonationOptions((current = []) => [...current, option])
+    setDonationOptions((current) => [...current, option])
     setNewOption({ type: 'paypal', currency: 'USD', enabled: true })
     setIsAddingNew(false)
     toast.success('Donation option added')
   }
 
   const handleDeleteOption = (id: string) => {
-    setDonationOptions((current = []) => current.filter(opt => opt.id !== id))
+    setDonationOptions((current) => current.filter(opt => opt.id !== id))
     toast.success('Donation option deleted')
   }
 
   const handleToggleEnabled = (id: string) => {
-    setDonationOptions((current = []) => 
+    setDonationOptions((current) => 
       current.map(opt => 
         opt.id === id ? { ...opt, enabled: !opt.enabled } : opt
       )
@@ -132,7 +131,7 @@ export function DonationsPanel() {
                         <Label>Type</Label>
                         <Select 
                           value={newOption.type} 
-                          onValueChange={(value) => setNewOption({ ...newOption, type: value as any })}
+                          onValueChange={(value: 'paypal' | 'stripe' | 'subscription') => setNewOption({ ...newOption, type: value })}
                         >
                           <SelectTrigger>
                             <SelectValue />
@@ -217,7 +216,7 @@ export function DonationsPanel() {
                 </Card>
               )}
 
-              {donationOptions && donationOptions.length > 0 ? (
+              {donationOptions.length > 0 ? (
                 <div className="space-y-3">
                   {donationOptions.map((option) => (
                     <Card key={option.id}>

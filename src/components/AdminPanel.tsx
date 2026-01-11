@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useKV } from '@github/spark/hooks'
+import { useLocalStorage } from '@/hooks/useLocalStorage'
 import { Lock, X } from '@phosphor-icons/react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -15,7 +15,7 @@ interface AdminPanelProps {
 }
 
 export function AdminPanel({ isOpen, onClose }: AdminPanelProps) {
-  const [isAuthenticated, setIsAuthenticated] = useKV<boolean>('admin-authenticated', false)
+  const [isAuthenticated, setIsAuthenticated] = useLocalStorage<boolean>('admin-authenticated', false)
   const [password, setPassword] = useState('')
   const [isLoading, setIsLoading] = useState(false)
 

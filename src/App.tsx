@@ -1,8 +1,7 @@
 import { useState, useMemo } from 'react'
-import { useKV } from '@github/spark/hooks'
+import { useLocalStorage } from '@/hooks/useLocalStorage'
 import { GameController, Heart, Funnel, GearSix } from '@phosphor-icons/react'
 import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { GameCard } from '@/components/GameCard'
 import { GameModal } from '@/components/GameModal'
@@ -14,8 +13,8 @@ import { toast } from 'sonner'
 const CATEGORIES: GameCategory[] = ['Action', 'Puzzle', 'Arcade', 'Strategy', 'Sports']
 
 function App() {
-  const [favorites, setFavorites] = useKV<string[]>('game-favorites', [])
-  const [playCounts, setPlayCounts] = useKV<Record<string, number>>('game-play-counts', {})
+  const [favorites, setFavorites] = useLocalStorage<string[]>('game-favorites', [])
+  const [playCounts, setPlayCounts] = useLocalStorage<Record<string, number>>('game-play-counts', {})
   const [selectedGame, setSelectedGame] = useState<Game | null>(null)
   const [isGameModalOpen, setIsGameModalOpen] = useState(false)
   const [isAdminPanelOpen, setIsAdminPanelOpen] = useState(false)
@@ -25,7 +24,7 @@ function App() {
   const gamesWithCounts = useMemo(() => {
     return GAMES.map(game => ({
       ...game,
-      playCount: (playCounts && playCounts[game.id]) || 0
+      playCount: playCounts[game.id] || 0
     }))
   }, [playCounts])
 
@@ -33,7 +32,7 @@ function App() {
     let games = gamesWithCounts
 
     if (activeTab === 'favorites') {
-      games = games.filter(game => favorites && favorites.includes(game.id))
+      games = games.filter(game => favorites.includes(game.id))
     }
 
     if (activeCategory !== 'All') {
@@ -44,7 +43,7 @@ function App() {
   }, [gamesWithCounts, activeTab, activeCategory, favorites])
 
   const handleToggleFavorite = (gameId: string) => {
-    setFavorites((current = []) => {
+    setFavorites((current) => {
       if (current.includes(gameId)) {
         toast.success('Removed from favorites')
         return current.filter(id => id !== gameId)
@@ -56,9 +55,9 @@ function App() {
   }
 
   const handlePlayGame = (game: Game) => {
-    setPlayCounts((current = {}) => ({
+    setPlayCounts((current) => ({
       ...current,
-      [game.id]: ((current && current[game.id]) || 0) + 1
+      [game.id]: (current[game.id] || 0) + 1
     }))
     setSelectedGame(game)
     setIsGameModalOpen(true)
@@ -107,7 +106,7 @@ function App() {
               </TabsTrigger>
               <TabsTrigger value="favorites" className="data-[state=active]:bg-accent data-[state=active]:text-accent-foreground">
                 <Heart weight="fill" className="w-4 h-4 mr-2" />
-                Favorites ({favorites?.length || 0})
+                Favorites ({favorites.length})
               </TabsTrigger>
             </TabsList>
 
@@ -140,7 +139,7 @@ function App() {
                   <GameCard
                     key={game.id}
                     game={game}
-                    isFavorite={favorites ? favorites.includes(game.id) : false}
+                    isFavorite={favorites.includes(game.id)}
                     onToggleFavorite={handleToggleFavorite}
                     onPlay={handlePlayGame}
                   />
@@ -167,7 +166,7 @@ function App() {
                   <GameCard
                     key={game.id}
                     game={game}
-                    isFavorite={favorites ? favorites.includes(game.id) : false}
+                    isFavorite={favorites.includes(game.id)}
                     onToggleFavorite={handleToggleFavorite}
                     onPlay={handlePlayGame}
                   />
