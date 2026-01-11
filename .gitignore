@@ -32,3 +32,19 @@ pids
 .devcontainer/
 
 .spark-workbench-id
+
+# Laravel specific
+/vendor
+/storage/*.key
+/storage/logs
+/storage/framework
+/public/hot
+/public/storage
+/public/build
+.phpunit.result.cache
+Homestead.json
+Homestead.yaml
+auth.json
+npm-debug.log
+yarn-error.log
+

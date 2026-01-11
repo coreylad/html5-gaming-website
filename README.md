@@ -1,6 +1,6 @@
 # HTML5 Gaming Website
 
-A modern HTML5 gaming platform that showcases browser-based games with an immersive, arcade-inspired interface where users can discover, play, and track their gaming experiences.
+A modern HTML5 gaming platform that showcases browser-based games with an immersive, arcade-inspired interface where users can discover, play, and track their gaming experiences. Built with Laravel for easy deployment.
 
 ## Features
 
@@ -13,6 +13,7 @@ A modern HTML5 gaming platform that showcases browser-based games with an immers
 
 ## Tech Stack
 
+- **Laravel 11** - Backend framework for easy deployment
 - **React 19** - Latest React with modern hooks
 - **TypeScript** - Type-safe development
 - **Vite** - Fast build tool and dev server
@@ -24,6 +25,8 @@ A modern HTML5 gaming platform that showcases browser-based games with an immers
 
 ### Prerequisites
 
+- PHP 8.2 or higher
+- Composer
 - Node.js 20 or higher
 - npm or yarn
 
@@ -35,67 +38,80 @@ git clone https://github.com/coreylad/html5-gaming-website.git
 cd html5-gaming-website
 ```
 
-2. Install dependencies:
+2. Install PHP dependencies:
+```bash
+composer install
+```
+
+3. Install Node.js dependencies:
 ```bash
 npm install
 ```
 
-3. Start the development server:
+4. Create environment file and generate application key:
+```bash
+cp .env.example .env
+php artisan key:generate
+```
+
+5. Configure your `.env` file with your database and other settings (optional for this app as it uses localStorage).
+
+### Development
+
+1. Start the Laravel development server:
+```bash
+php artisan serve
+```
+
+2. In another terminal, start the Vite development server:
 ```bash
 npm run dev
 ```
 
-4. Open your browser and navigate to `http://localhost:5173`
+3. Open your browser and navigate to `http://localhost:8000`
 
 ### Building for Production
 
+1. Build the frontend assets:
 ```bash
 npm run build
 ```
 
-The production-ready files will be in the `dist` directory.
+2. The application is now ready for deployment. Serve it using Laravel's built-in server or configure your web server (Apache/Nginx).
 
-## Docker Setup
+## Deployment
 
-This project includes Docker support for easy deployment and containerization.
+### Simple Deployment (Shared Hosting)
 
-### Using Docker Compose (Recommended)
-
-Build and run the container:
+1. Upload all files to your web server
+2. Point your domain to the `public` directory
+3. Run `composer install --no-dev --optimize-autoloader`
+4. Run `npm run build`
+5. Set proper permissions:
 ```bash
-docker-compose up -d
+chmod -R 755 storage bootstrap/cache
 ```
 
-Stop the container:
+### Laravel Forge / Vapor
+
+This app is ready to deploy to Laravel Forge or Vapor with minimal configuration:
+
+1. Connect your repository
+2. Set up the deployment script:
 ```bash
-docker-compose down
+cd /home/forge/your-site.com
+git pull origin main
+composer install --no-dev --optimize-autoloader
+npm install
+npm run build
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
 ```
 
-The application will be available at `http://localhost:8080`
+### Traditional Server (Ubuntu/Nginx)
 
-### Using Docker directly
-
-Build the image:
-```bash
-docker build -t html5-gaming-website .
-```
-
-Run the container:
-```bash
-docker run -d -p 8080:80 --name gaming-website html5-gaming-website
-```
-
-Stop the container:
-```bash
-docker stop gaming-website
-docker rm gaming-website
-```
-
-### Docker Image Details
-- **Base Image**: Node 20 Alpine (build stage), Nginx Alpine (production stage)
-- **Build Process**: Multi-stage build for optimized image size
-- **Port**: The application runs on port 80 inside the container, mapped to port 8080 on the host
-- **Web Server**: Nginx for serving static files
+See the official Laravel deployment documentation: https://laravel.com/docs/11.x/deployment
 
 ## Admin Panel
 
