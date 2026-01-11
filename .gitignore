@@ -31,8 +31,6 @@ pids
 .file-manifest
 .devcontainer/
 
-.spark-workbench-id
-
 # Laravel specific
 /vendor
 /storage/*.key

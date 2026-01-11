@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react'
 
 /**
  * Custom hook for managing localStorage with React state synchronization
- * Replaces @github/spark's useKV hook for production-ready code
+ * Provides production-ready local storage integration with React state
  * 
  * @param key - The localStorage key
  * @param initialValue - Default value if key doesn't exist
